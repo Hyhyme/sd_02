@@ -1,7 +1,10 @@
 var c = document.getElementById("slate");
 var ctx = c.getContext("2d");
 
+var growshrink = document.getElementById('growshrink');
+var dvd = document.getElementById('dvd');
 var stop = document.getElementById('stop');
+var clear = document.getElementById('clear');
 
 ctx.fillStyle = "coral"
 
@@ -26,9 +29,7 @@ var grow = function() {
 	} else {
 	    window.cancelAnimationFrame(requestID);
 	    shrink();
-    }
-	
-	console.log(r);
+	}
     }
     growing();	
 }
@@ -51,17 +52,61 @@ var shrink = function() {
 	} else {
 	    window.cancelAnimationFrame(requestID);
 	    grow();
-    }
-	
-	console.log(r);
+	}
     }
     shrinking();
+}
+
+var bounce = function() {
+    var lastX;
+    var lastY;
+    var currX = 250;
+    var currY = 250;
+    var angle = Math.PI / 8;
+    
+    var dX = Math.cos(angle) * 8;
+    var dY = Math.sin(angle) * 8;
+
+    stopIt();
+
+    var bouncing = function () {
+	
+	ctx.clearRect( 0, 0, 500, 500 );
+
+	ctx.beginPath();
+	ctx.arc( currX, currY, 33, 0, 2*Math.PI );
+	ctx.fill();
+
+	if( currX <= 33 || currX >= 467 ) {
+	    dX *= -1;
+	}
+	if( currY <= 33 || currY >= 467 ) {
+	    dY *= -1;
+	}
+	currX += dX;
+	currY += dY;
+	/*
+	lastX = currX;
+	lastY = currY;
+*/
+
+	requestID = window.requestAnimationFrame(bouncing);
+
+    }
+    bouncing();
 }
 
 var stopIt = function() {
     window.cancelAnimationFrame(requestID);
 }
 
-c.addEventListener( 'click', grow );
+var clearIt = function() {
+    window.cancelAnimationFrame(requestID);
+    ctx.clearRect( 0, 0, 500, 500 );
+}
+
+growshrink.addEventListener( 'click', grow );
+dvd.addEventListener( 'click', bounce );
 stop.addEventListener( 'click', stopIt );
+clear.addEventListener( 'click', clearIt );
     
