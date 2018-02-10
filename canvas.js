@@ -2,7 +2,8 @@ var c = document.getElementById("slate");
 var ctx = c.getContext("2d");
 
 var growshrink = document.getElementById('growshrink');
-var dvd = document.getElementById('dvd');
+var circButt = document.getElementById('circButt');
+var rectButt = document.getElementById('rectButt');
 var stop = document.getElementById('stop');
 var clear = document.getElementById('clear');
 
@@ -57,9 +58,7 @@ var shrink = function() {
     shrinking();
 }
 
-var bounce = function() {
-    var lastX;
-    var lastY;
+var circBounce = function() {
     var currX = 250;
     var currY = 250;
     var angle = Math.PI / 8;
@@ -85,15 +84,46 @@ var bounce = function() {
 	}
 	currX += dX;
 	currY += dY;
-	/*
-	lastX = currX;
-	lastY = currY;
-*/
 
 	requestID = window.requestAnimationFrame(bouncing);
 
     }
     bouncing();
+}
+
+var rectBounce = function() {
+
+    stopIt();
+
+    var currX = 250;
+    var currY = 250;
+    
+    var angle = Math.PI / 6;
+    
+    var dX = Math.cos(angle) * 8;
+    var dY = Math.sin(angle) * 8;
+
+    var bouncing = function() {
+		
+	ctx.clearRect( 0, 0, 500, 500 );
+
+	ctx.beginPath();
+	ctx.rect( currX, currY, 100, 50 );
+	ctx.fill();
+
+	if( currX <= 0 || currX >= 400 ) {
+	    dX *= -1;
+	}
+	if( currY <= 0 || currY >= 450 ) {
+	    dY *= -1;
+	}
+	currX += dX;
+	currY += dY;
+
+	requestID = window.requestAnimationFrame(bouncing);
+    }
+    bouncing();
+	
 }
 
 var stopIt = function() {
@@ -106,7 +136,7 @@ var clearIt = function() {
 }
 
 growshrink.addEventListener( 'click', grow );
-dvd.addEventListener( 'click', bounce );
+circButt.addEventListener( 'click', circBounce );
+rectButt.addEventListener( 'click', rectBounce );
 stop.addEventListener( 'click', stopIt );
 clear.addEventListener( 'click', clearIt );
-    
